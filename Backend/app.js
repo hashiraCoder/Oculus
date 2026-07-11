@@ -15,6 +15,6 @@ app.use(express.static("public")) // for the files that can put in own server li
 import userRouter from './routes/user.routes.js'
 
 //route declaration 
- app.use("/api/v1/users",userRouter)
+// eg  app.use("/api/v1/users",userRouter)
 
 export default app;
