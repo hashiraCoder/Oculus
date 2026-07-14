@@ -1,5 +1,8 @@
-import {wiston} from wiston;
-import config from './env';
+import fs from 'node:fs';
+import winston from 'winston';
+import config from './env.js';
+
+fs.mkdirSync('logs', { recursive: true });
 
 const logFormat = winston.format.printf(({ level, message, timestamp, stack }) => {
     return `${timestamp} [${level.toUpperCase()}]: ${stack || message}`;
@@ -15,7 +18,6 @@ const logger = winston.createLogger({
     ),
     defaultMeta: { service: 'scanner-api' },
     transports: [
-        // Write all logs with level 'error' and below to 'error.log'
         new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
         // Write all logs to 'combined.log'
         new winston.transports.File({ filename: 'logs/combined.log' })

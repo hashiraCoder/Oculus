@@ -23,12 +23,11 @@ const errorHandler = (err, req, res, next) => {
     const response = {
         success: error.success,
         message: error.message,
-        errors: error.error,
+        errors: error.errors,
         data: error.data
     };
 
-    // Note: using error.statuscode (lowercase 'c') exactly as defined in your utility class
-    return res.status(error.statuscode || 500).json(response);
+    return res.status(error.statusCode || 500).json(response);
 };
 
 export { errorHandler };

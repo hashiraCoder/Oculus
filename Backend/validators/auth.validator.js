@@ -1,21 +1,48 @@
-import Joi from "joi";
-import validate from "../utils/validator";
+import validate, { isEmail, toTrimmedString } from '../utils/validator.js';
 
-const registerSchema = Joi.object({
-    email: Joi.string().email().required(),
-    password: Joi.string().min(12).required().messages({
-        'string.min': 'Password must be at least 12 characters.'
-    }),
-    name: Joi.string().min(2).max(50).required()
-});
+const validateRegisterInput = (body) => {
+    const errors = [];
+    const value = {
+        email: toTrimmedString(body?.email).toLowerCase(),
+        password: typeof body?.password === 'string' ? body.password : '',
+        name: toTrimmedString(body?.name)
+    };
 
-const loginSchema = Joi.object({
-    email: Joi.string().email().required(),
-    password: Joi.string().required()
-});
+    if (!isEmail(value.email)) {
+        errors.push('Email must be a valid email address.');
+    }
 
-const validateRegister = validate(registerSchema);
-const validateLogin = validate(loginSchema);
+    if (value.password.length < 12) {
+        errors.push('Password must be at least 12 characters.');
+    }
+
+    if (value.name.length < 2 || value.name.length > 50) {
+        errors.push('Name must be between 2 and 50 characters.');
+    }
+
+    return { value, errors };
+};
+
+const validateLoginInput = (body) => {
+    const errors = [];
+    const value = {
+        email: toTrimmedString(body?.email).toLowerCase(),
+        password: typeof body?.password === 'string' ? body.password : ''
+    };
+
+    if (!isEmail(value.email)) {
+        errors.push('Email must be a valid email address.');
+    }
+
+    if (!value.password) {
+        errors.push('Password is required.');
+    }
+
+    return { value, errors };
+};
+
+const validateRegister = validate(validateRegisterInput);
+const validateLogin = validate(validateLoginInput);
 export {
     validateRegister,
     validateLogin

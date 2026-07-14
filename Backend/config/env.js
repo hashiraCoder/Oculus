@@ -1,15 +1,14 @@
 // fast fail check of envirroment variables
 import dotenv from 'dotenv';
-dotenv.config({path:'./.env'})
+dotenv.config({ path: './.env' });
 
 const requiredEnvVars = [
-    'NODE_ENV',
-    'PORT',
     'DB_USER',
     'DB_PASSWORD',
     'DB_HOST',
     'DB_PORT',
-    'DB_NAME'
+    'DB_NAME',
+    'JWT_SECRET'
 ];
 
 // Fail fast if critical environment variables are missing
@@ -36,7 +35,14 @@ const config = {
         appId: process.env.GITHUB_APP_ID,
         privateKey: process.env.GITHUB_PRIVATE_KEY,
         webhookSecret: process.env.GITHUB_WEBHOOK_SECRET,
+    },
+    jwt: {
+        secret: process.env.JWT_SECRET,
+        refreshSecret: process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET,
+        accessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN || '15m',
+        refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
+        expiresIn: process.env.JWT_ACCESS_EXPIRES_IN || '15m'
     }
 };
 
-export default config ;
+export default config;
